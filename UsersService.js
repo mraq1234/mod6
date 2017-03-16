@@ -18,5 +18,10 @@ class UsersService {
     removeUser(userId) {
         this.users = this.users.filter(user => user.id !== userId);
     }
+
+    changeUserStatus(currentUser){
+        const userIdx = this.users.findIndex(user => user.id === currentUser.id);
+        this.users[userIdx] = currentUser;
+    }
 }
 module.exports = UsersService;

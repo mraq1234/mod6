@@ -19,12 +19,20 @@ io.on('connection', function(socket) {
     socket.on("join", function(name) {
         userService.addUser({
             id: socket.id,
-            name
+            name,
+            status: 'active'
         });
         io.emit('update', {
             users: userService.getAllUsers()
         });
     });
+
+    socket.on('updateStatus', function(user) {
+        userService.changeUserStatus(user);
+        io.emit('update', {
+            users: userService.getAllUsers()
+        });
+    })
 
     socket.on('message', function(message) {
         const { name } = userService.getUserById(socket.id);
@@ -42,6 +50,6 @@ io.on('connection', function(socket) {
     });
 });
 
-server.listen(3000, function() {
-    console.log('listening on *:3000');
+server.listen(3000, '127.0.0.1', function() {
+    console.log('listening on 127.0.0.1:3000');
 });

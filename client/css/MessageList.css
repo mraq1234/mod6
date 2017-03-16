@@ -5,4 +5,11 @@
     justify-content: flex-start;
     width: 75vw;
     padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.Message {
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

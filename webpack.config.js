@@ -15,9 +15,10 @@ if (env === 'production') {
 }
 
 module.exports = {
+    devtool: 'source-map',
     entry: [
-        'react-hot-loader/patch',
-        'webpack-dev-server/client?http://localhost:3000/',
+        'react-hot-loader/patch',      
+        'webpack-dev-server/client?http://127.0.0.1:8080/',
         'webpack/hot/only-dev-server',
         './client/index.js'
     ],

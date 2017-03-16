@@ -13,7 +13,6 @@ const render = (Component) => {
 render(App);
 
 if (module.hot) {
-    console.log('module.hot = ', module.hot)
     module
         .hot
         .accept('./App', () => {
@@ -21,5 +20,3 @@ if (module.hot) {
             render(NewApp)
         });
 }
-// ReactDOM.render(
-//     <App/>, document.getElementById('root'));

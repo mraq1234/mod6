@@ -15,16 +15,28 @@ class App extends Component {
       users: [],
       messages: [],
       text: '',
-      name: ''
+      name: '',
+      status: 'active'
     };
-  //  this.messageReceive = this.messageReceive.bind(this);
-  //  this.handleMessageSubmit = this.handleMessageSubmit.bind(this);
   }
 
   componentDidMount() {
-    console.log('this = ', this);
     socket.on('message', message => this.messageReceive(message));
     socket.on('update', ({users}) => this.chatUpdate(users));
+    this.focusTimer = setInterval(() => this.checkAndChangeStatus(), 10);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.focusTimer);
+  }
+
+  checkAndChangeStatus() {
+    const docFocused = document.hasFocus();
+    if (!docFocused && this.state.status === 'active') {
+      this.handleUserStatusChange('inactive');
+    } else if (docFocused && this.state.status === 'inactive') {
+      this.handleUserStatusChange('active');
+    }
   }
 
   messageReceive(message) {
@@ -51,6 +63,16 @@ class App extends Component {
     socket.emit('join', name);
   }
 
+  handleUserStatusChange(status) {
+    const user = {
+            id: socket.id,
+            name: this.state.name,
+            status
+        }
+    this.setState({status})
+    socket.emit('updateStatus', user);
+  }
+
   render() {
     return this.state.name !== ''
       ? this.renderLayout()
@@ -73,6 +95,7 @@ class App extends Component {
           <div className={styles.MessageWrapper}>
             <MessageList messages={this.state.messages}/>
             <MessageForm
+              onStartTyping={status => this.handleUserStatusChange(status)}
               onMessageSubmit={message => this.handleMessageSubmit(message)}
               name={this.state.name}/>
           </div>
@@ -83,7 +106,5 @@ class App extends Component {
   renderUserForm() {
     return (<UserForm onUserSubmit={name => this.handleUserSubmit(name)}/>)
   }
-
 };
-
 export default App;

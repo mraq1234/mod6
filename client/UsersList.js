@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styles from './css/UsersList.css';
 
 const UsersList = props => (
@@ -12,7 +11,7 @@ const UsersList = props => (
         props.users.map((user) => {
           return (
             <li key={user.id} className={styles.UserItem}>
-              {user.name}
+              <img src={`/img/${user.status}.png`} className={styles.StatusImg}/>{user.name}
             </li>
           );
         })

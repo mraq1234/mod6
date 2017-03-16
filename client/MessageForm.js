@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
-
 import styles from './css/MessageForm.css';
 
 class MessageForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {text: ''};
+    this.state = {
+      text: '',
+      status: 'active'
+    };
+  }
+
+  changePropsAndState(userStatus) {
+    this.props.onStartTyping(userStatus);
+    this.setState({status: userStatus});
+  }
+
+  startTypingTimer() {
+    if (this.state.status !== 'typing') this.changePropsAndState('typing');
+    this.clock = setTimeout(()=> this.changePropsAndState('active'), 1000);
   }
 
   handleSubmit(e) {
@@ -19,6 +31,8 @@ class MessageForm extends Component {
   }
 
   changeHandler(e) {
+    clearTimeout(this.clock);
+    this.startTypingTimer();
     this.setState({ text : e.target.value });
   }
 
